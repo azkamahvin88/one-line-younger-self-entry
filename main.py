@@ -49,6 +49,15 @@ def check(line: str) -> int:
     length = len(line)
     if length < 1 or length > 200:
         raise ValueError(f"entry is {length} characters; the gate needs 1-200")
+    # The brief requires a line ONLY this person's older self could write:
+    # it must speak to the younger self directly, and name a moment from
+    # the life arc (a time, a place, a person) — not generic advice.
+    lowered = line.lower()
+    if not any(w in lowered for w in ("you ", "your ", "you'll", "you'd", "you're")):
+        raise ValueError("entry must address the younger self directly")
+    life_cues = ("one day", "someday", "years", "child", "school", "old", "young", "when you", "before you", "after")
+    if not any(cue in lowered for cue in life_cues):
+        raise ValueError("entry must name a moment from the life arc")
     return length
 
 
