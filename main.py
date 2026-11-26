@@ -58,6 +58,11 @@ def check(line: str) -> int:
     life_cues = ("one day", "someday", "years", "child", "school", "old", "young", "when you", "before you", "after")
     if not any(cue in lowered for cue in life_cues):
         raise ValueError("entry must name a moment from the life arc")
+    # The brief requires the line to land in one breath: it must read
+    # without stumbling, so cap the pauses — at most one em dash and at
+    # most one comma.
+    if line.count("\u2014") > 1 or line.count(",") > 1:
+        raise ValueError("entry must land in one breath (at most one dash, one comma)")
     return length
 
 
